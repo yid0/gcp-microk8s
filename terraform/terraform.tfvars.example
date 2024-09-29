@@ -1,0 +1,7 @@
+
+project       = "high-xxxxx-1025478-a1"
+region        = "us-central1"
+zone          = "us-central1-a"
+instance_type = "n1-standard-1"
+ssh_public_key = "ssh-rsa ....."
+disk_size     = "10"

@@ -1,0 +1,5 @@
+**/.terraform
+*tfstate*
+*.hcl*
+ansible/
+**/terraform.tfvars
