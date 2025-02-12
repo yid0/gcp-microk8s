@@ -1,0 +1,5 @@
+
+- name: Restart microk8s
+  service:
+    name: snap.microk8s.daemon-apiserver
+    state: restarted

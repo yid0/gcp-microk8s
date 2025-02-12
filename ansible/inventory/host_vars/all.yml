@@ -1,0 +1,10 @@
+master_ip: "{{ lookup('file', '../terraform_output_master_ip.txt') }}"
+worker_ips: "{{ lookup('file', '../terraform_output_worker_ips.txt') | from_json }}"
+microk8s_version: "latest"
+microk8s_addons:
+  - "dns"
+  - "hostpath-storage"
+  - "dashboard"
+  - "ha-cluster"
+  - "ingress"
+  - "metallb"

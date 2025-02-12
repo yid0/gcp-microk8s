@@ -1,0 +1,10 @@
+microk8s_version: "latest"
+microk8s_addons:
+  - "dns"
+  - "hostpath-storage"
+  - "dashboard"
+  - "ha-cluster"
+  - "metallb"
+  - "ingress"
+
+master_ip : "{{ lookup('file', '../../../../terraform_output_master_ip.txt') }}"

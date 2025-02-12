@@ -1,0 +1,7 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Reset MicroK8s cluster
+      shell: "microk8s reset"
+      ignore_errors: yes

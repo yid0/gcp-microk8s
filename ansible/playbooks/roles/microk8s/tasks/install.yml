@@ -1,0 +1,75 @@
+---
+- name: Mettre à jour le cache Snap
+  command: snap refresh
+
+- name: Create .kube directory for the user
+  remote_user: ubuntu
+  become: true
+  file:
+    path: /home/ubuntu/.kube
+    state: directory
+    mode: 0700
+    owner: ubuntu
+    group: ubuntu
+
+- name: Install MicroK8s On "{{ node_type }}"
+  remote_user: ubuntu
+  snap:
+    name: microk8s
+    state: present
+    classic: yes
+    channel: 1.30/stable
+
+- name: Wait for MicroK8s installation to complete
+  pause:
+    seconds: 15
+
+- name: Add user to microk8s group
+  remote_user: ubuntu
+  become: true
+  shell: usermod -a -G microk8s ubuntu
+
+- name: Check MicroK8s installation version
+  remote_user: ubuntu
+  shell: microk8s version
+  register: microk8s_version_output
+  ignore_errors: no
+
+- name: Fail if MicroK8s is not installed
+  fail:
+    msg: "MicroK8s installation failed!"
+  when: microk8s_version_output.rc != 0
+
+- name: Check if HA addon is already enabled
+  remote_user: ubuntu
+  shell: microk8s status | grep 'ha-cluster'
+  register: ha_status
+  ignore_errors: yes
+
+- name: Enable HA addon only if not enabled
+  remote_user: ubuntu
+  shell: microk8s enable ha-cluster
+  when: ha_status.rc != 0
+  register: enable_ha_result
+
+- name: Display HA cluster status
+  debug:
+    var: enable_ha_result
+
+- name: Wait for MicroK8s to be ready after HA enabling
+  remote_user: ubuntu
+  shell: microk8s status --wait-ready
+  register: microk8s_status_output
+  retries: 10
+  delay: 30
+  until: microk8s_status_output.rc == 0
+  ignore_errors: no
+
+
+
+# - name: Add current user to the microk8s group
+#   user:
+#     name: "{{ ansible_user_id }}"
+#     groups: microk8s
+#     append: yes
+#   when: microk8s_version_output.rc != 0

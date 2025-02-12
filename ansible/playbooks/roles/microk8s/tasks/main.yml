@@ -1,0 +1,13 @@
+---
+
+- include_tasks: debug.yml
+- include_tasks: install.yml
+
+- name: Install Microk8s Addons
+  include_tasks: addons.yml
+  ignore_errors: no
+
+- name: Join worker nodes to master
+  include_tasks: join.yml
+  when: microk8s_role == "worker"
+

@@ -38,12 +38,12 @@ resource "google_compute_disk" "microk8s_persistent_disk" {
   zone  = var.zone
 }
 
-output "instance_ips" {
-  value = jsonencode({ 
-    for instance in google_compute_instance.microk8s : instance.name => instance.network_interface[0].access_config[0].nat_ip
-  })
-}
+# output "instance_ips" {
+#   value = jsonencode({ 
+#     for instance in google_compute_instance.microk8s : instance.name => instance.network_interface[0].access_config[0].nat_ip
+#   })
+# }
 
-output "persistent_disks" {
-  value = [for disk in google_compute_disk.microk8s_persistent_disk : disk.name]
-}
+# output "persistent_disks" {
+#   value = [for disk in google_compute_disk.microk8s_persistent_disk : disk.name]
+# }

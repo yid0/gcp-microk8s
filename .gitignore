@@ -1,5 +1,8 @@
 **/.terraform
+**/terraform.tfvars
 *tfstate*
 *.hcl*
-ansible/
-**/terraform.tfvars
+**.txt
+ansible/**/hosts*
+
+Dockerfile

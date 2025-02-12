@@ -1,0 +1,8 @@
+microk8s_version: "latest"
+microk8s_addons:
+  - "dns"
+  - "hostpath-storage"
+  - "dashboard"
+  - "ha-cluster"
+  - "metallb"
+  - "ingress"

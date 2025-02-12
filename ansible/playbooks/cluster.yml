@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - role: common
+
+- hosts: master
+  become: true
+  roles:
+    - role: microk8s
+      microk8s_role: "master"
+  vars:
+    node_type: "master"
+
+- hosts: worker
+  become: true
+  roles:
+    - role: microk8s
+      microk8s_role: "worker"
+  vars:
+    node_type: "worker"

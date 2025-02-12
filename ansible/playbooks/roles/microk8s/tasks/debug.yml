@@ -1,0 +1,10 @@
+---
+- name: Show variables
+  debug:
+    var: "{{ item }}"
+  with_items:
+    - master_ip
+    - node-1-ip
+    - node-2-ip
+    - microk8s_addons
+    - microk8s_version

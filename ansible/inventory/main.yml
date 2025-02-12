@@ -1,0 +1,23 @@
+- name: Generate Ansible inventory from template
+  hosts: localhost
+  vars:
+    master_ip: "{{ lookup('file', '../terraform_output_master_ip.txt') }}"
+    worker_ips: "{{ lookup('file', '../terraform_output_worker_ips.txt') | from_json }}"
+    microk8s_version: "{{ microk8s_version }}"
+  tasks:
+    - name: Ensure the hosts.yml file is removed
+      file:
+        path: ../playbooks/hosts.yml
+        state: absent
+      ignore_errors: no
+      
+    - name: Template the inventory file
+      template:
+        src: ../templates/hosts.j2
+        dest: ../playbooks/hosts.yml
+
+    - name: Add SSH key to known_hosts
+      known_hosts:
+        path: ~/.ssh/known_hosts
+        name: "{{ inventory_hostname }}"
+        key: "{{ lookup('pipe', 'ssh-keyscan -H ' + inventory_hostname) }}"
